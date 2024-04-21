@@ -1,0 +1,18 @@
+GET http://localhost:6005
+
+###
+POST  http://localhost:6005/auth/login
+
+###
+POST  http://localhost:6005/auth/register
+Content-Type: application/json
+
+{
+    "email":"tayyab123@gmail.com",
+    "password": "123456"
+}
+###
+DELETE   http://localhost:6005/auth/logout
+
+###
+POST  http://localhost:6005/auth/refresh-token
