@@ -391,7 +391,7 @@
   "resolved" "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.2.0.tgz"
   "version" "2.2.0"
 
-"body-parser@1.20.2":
+"body-parser@^1.20.2", "body-parser@1.20.2":
   "integrity" "sha512-ml9pReCu3M61kGlqoTm2umSXTlRTuGTx0bfYj+uIUKKYycG5NtSbeetV3faSU6R7ajOPw0g/J1PvK4qNy7s5bA=="
   "resolved" "https://registry.npmjs.org/body-parser/-/body-parser-1.20.2.tgz"
   "version" "1.20.2"
@@ -1040,6 +1040,11 @@
   "version" "2.7.0"
   dependencies:
     "whatwg-url" "^5.0.0"
+
+"nodemailer@^6.9.13":
+  "integrity" "sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA=="
+  "resolved" "https://registry.npmjs.org/nodemailer/-/nodemailer-6.9.13.tgz"
+  "version" "6.9.13"
 
 "nodemon@^3.1.0":
   "integrity" "sha512-xqlktYlDMCepBJd43ZQhjWwMw2obW/JRvkrLxq5RCNcuDDX1DbcPT+qT1IlIIdf+DhnWs90JpTMe+Y5KxOchvA=="

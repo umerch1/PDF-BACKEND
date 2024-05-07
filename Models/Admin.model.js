@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt =require('bcrypt')
-const UserSchema = new Schema({
+const AdminSchema = new Schema({
     email: {
         type: String,
         required:true,
@@ -11,10 +11,13 @@ const UserSchema = new Schema({
     password: {
         type :String,
         required: true,
-    },   
+    },
+    admin:{
+        type: Boolean,
+    }   
 });
 
-UserSchema.pre('save', async function(next){
+AdminSchema.pre('save', async function(next){
 try {
     const salt = await bcrypt.genSalt(10);
     const hashPassword= await bcrypt.hash(this.password,salt);
@@ -24,7 +27,7 @@ try {
     next(error)
 }
 })
-UserSchema.methods.isValidPassword=async function(password){
+AdminSchema.methods.isValidPassword=async function(password){
     try {
         return await bcrypt.compare(password, this.password)
     } catch (error) {
@@ -33,6 +36,6 @@ UserSchema.methods.isValidPassword=async function(password){
 }
 
 
-const User =mongoose.model('user', UserSchema);
+const Admin =mongoose.model('admin', AdminSchema);
 
-module.exports= User;
+module.exports= Admin;

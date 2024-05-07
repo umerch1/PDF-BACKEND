@@ -2,14 +2,28 @@ GET http://localhost:6005
 
 ###
 POST  http://localhost:6005/auth/login
-
-###
-POST  http://localhost:6005/auth/register
 Content-Type: application/json
 
 {
-    "email":"tayyab123@gmail.com",
+    "email":"tayyba123@gmail.com",
     "password": "123456"
+}
+###
+POST  http://localhost:6005/auth/login
+Content-Type: application/json
+
+{
+    "email":"tayyba123@gmail.com",
+    "password": "123456"
+    
+}
+
+###
+POST  http://localhost:6005/password/forgot-password
+Content-Type: application/json
+
+{
+    "email":"umerf3024@gmail.com"
 }
 ###
 DELETE   http://localhost:6005/auth/logout
