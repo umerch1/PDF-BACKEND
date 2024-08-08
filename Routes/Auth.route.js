@@ -5,6 +5,7 @@ const User =require('../Models/User.model');
 const {authSchema} =require('../helpers/Validation_schema');
 const {adminSchema}=require('../helpers/Validation_admin_schema');
 const nodemailer = require("nodemailer");
+const bcrypt =require('bcrypt')
 const Admin = require('../Models/Admin.model');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -36,7 +37,8 @@ router.post('/register',async(req,res,next)=>{
         if(doesExit) throw createError.Conflict(`${ result.email} is already been registered`);
         const user=new User(result);
         const savedUser=await user.save();
-        res.send(savedUser);
+        res.send({message:"Register Successfully",
+            savedUser});
     } catch (error) {
         if(error.isJoi===true) error.status =422;
         next(error)
@@ -50,7 +52,10 @@ router.post('/admin/register',async(req,res,next)=>{
         if(doesExit) throw createError.Conflict(`${ result.email} is already been registered`);
         const admin=new Admin(result);
         const savedAdmin=await admin.save();
-        res.send(savedAdmin);
+        res.send({
+            message:"Register successfully",
+            savedAdmin
+        });
     } catch (error) {
         if(error.isJoi===true) error.status =422;
         next(error)
@@ -63,9 +68,9 @@ router.post('/login',async(req,res,next)=>{
         const user=await User.findOne({email:result.email});
         if(!user) throw createError.NotFound('User not registered');
         const isMatch=await user.isValidPassword(result.password);
+        console.log("User match_________",isMatch)
         if(!isMatch) throw createError.Unauthorized('username/password is not valid');
-        main().catch(console.error);
-        const message=[{message:"You are login successfully"}]
+        const message=[{message:"You are login successfully"},{data:user}]
     res.send(message);
     } catch (error) {
         if(error.isJoi===true) return next(createError.BadRequest('Invalid UserName/Password'))
@@ -84,7 +89,7 @@ router.post('/admin/login',async(req,res,next)=>{
         const isMatch=await user.isValidPassword(result.password);
         if(!isMatch) throw createError.Unauthorized('Admin Email/password is not valid');
         main().catch(console.error);
-        const message=[{message:"You are Login successfully", Admin:true}]
+        const message=[{message:"You are Login successfully"},{data:user}, {admin:true}]
         res.send(message);
     } catch (error) {
         if(error.isJoi===true) return next(createError.BadRequest('you are not authorized Please register'))
@@ -95,20 +100,39 @@ router.post('/admin/login',async(req,res,next)=>{
 // User Data get Api
 router.get('/user',async(req,res,next)=>{
     const user=await User.find();
-    res.send(user)
+    if(user.length===0){
+       throw createError(400,{message:"No Record Found"})
+    }else{
+         res.send(user);
+    }
+   
 })
 
 router.post('/refresh-token',async(req,res,next)=>{
     res.send("refresh token route");
 })
-router.put('/resetpassword',async(req,res,next)=>{
+// Reset Password
+router.put('/reset-password',async(req,res,next)=>{
+    try {
+        const result =await authSchema.validateAsync(req.body);      
+        const doesExit= await User.findOne({email:result.email});
+        if(!doesExit) throw createError.Conflict(`${ result.email} not found`);
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword= await bcrypt.hash(result.password,salt);
+        await User.findOneAndUpdate({email:result.email},{$set:{
+            password:hashPassword
+        }})
+        res.status(200).send({success:true, message:'Password has been reset'});
+    } catch (error) {
+        res.status(400).send(error);
+    }
 })
 router.delete('/user/delete',async(req,res,next)=>{
    console.log(req.body.id);
    try {
     const id = req.body.id
    const deleteUser= await User.deleteOne({ _id: id })
-   res.send(deleteUser)
+   res.send({message:`Delete successfully ${req.body.id}`,deleteUser})
 } catch (error) {
     console.log(error.message)
 

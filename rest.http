@@ -1,20 +1,30 @@
 GET http://localhost:6005
 
 ###
-POST  http://localhost:6005/auth/login
+POST  http://localhost:6005/auth/admin/login
 Content-Type: application/json
 
 {
-    "email":"tayyba123@gmail.com",
-    "password": "123456"
+    "name":"Muhammad Farooq",
+    "email":"umerf3024@gmail.com",
+    "password": "121212",
+    "admin":true
 }
 ###
 POST  http://localhost:6005/auth/login
 Content-Type: application/json
 
 {
-    "email":"tayyba123@gmail.com",
-    "password": "123456"
+    "email":"umerf3024@gmail.com",
+    "password": "121212"
+}
+###
+PUT   http://localhost:6005/auth/reset-password
+Content-Type: application/json
+
+{
+    "email":"umerf3024@gmail.com",
+    "password": "121212"
     
 }
 
